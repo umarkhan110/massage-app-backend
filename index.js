@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use('/uploads', express.static('uploads'));
 
 app.use('/admin', require('./routes/admin.js'));
-app.use('/provider', require('./routes/provider'));
+app.use('/provider', require('./routes/provider.js'));
 
 app.use('/user', require('./routes/dashboard.js'));
 app.use('/expense', require('./routes/expenses.js'));
