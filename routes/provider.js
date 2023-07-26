@@ -2,13 +2,27 @@ const express = require('express')
 const router = express.Router();
 const Providers = require('../model/Provider');
 const Orders = require('../model/Booking');
+const path = require('path');
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+      cb(null, './uploads')
+  },
+  filename: (req, file, cb) => {
+      cb(null, Date.now() + path.extname(file.originalname));
+  }
+});
+
+const upload = multer({ storage: storage });
 
 // Create New Provider
-router.post('/apply_provider', async (req, res) => {
+router.post('/apply_provider', upload.single("image"), async (req, res) => {
     const status = "Pending"
-        const { fname, lname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password  } = req.body;
-    try {
-        const provider = new Providers({ fname, lname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password, status });
+        const { fullname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password  } = req.body;
+        const image = (req.file) ? req.file.filename : null;
+        try {
+        const provider = new Providers({ fullname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password, status, image });
         const saveProvider = await provider.save();
         //res.json(saveblog)
         return res.status(200).json({ message: "Provider Saved" });

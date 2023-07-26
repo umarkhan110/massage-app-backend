@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 const provider = new mongoose.Schema({
-    fname:{
-        type:String,
-        required:true
-    },
-    lname:{
+    fullname:{
         type:String,
         required:true
     },
@@ -18,10 +14,9 @@ const provider = new mongoose.Schema({
         type:String,
         required:true
     },
-    // password:{
-    //     type:String,
-    //     required:true
-    // },
+    image:{
+        type:String,
+    },
     gender:{
         type:String,
         required:true
@@ -62,7 +57,8 @@ const provider = new mongoose.Schema({
     }, 
     password: {
         type:String,
-    }
+    },
+
 });
 
 

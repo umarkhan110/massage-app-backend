@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const serverless = require('serverless-http')
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
@@ -39,3 +40,6 @@ app.use('/expense', require('./routes/expenses.js'));
 app.listen(PORT, () => {
   console.log('Server is listening on port ' + PORT);
 });
+
+app.use('/.netlify/functions/api', router);
+module.exports.handler = serverless(app)
