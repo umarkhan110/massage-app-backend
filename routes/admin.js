@@ -12,7 +12,8 @@ const authenticate = require('../middleware/admin');
 router.post("/signup",  async (req, res) => {
   const { email, password } = req.body;
   try {
-      const user = new Admins({ email, password });
+    const role = "Admin"
+      const user = new Admins({ email, password, role });
       await user.save();
       return res.status(200).json({ message: "Admin Created Successfully" });
 
@@ -53,6 +54,16 @@ router.get('/showProviders', authenticate, async (req, res) => {
   } catch (error) {
           console.log(error);
     res.status(500).json({ message: 'Server error' });
+  }
+})
+
+// Get Providers By id
+router.get('/showProvider/:id', authenticate, async (req, res) => {
+  try {
+      const provider = await Providers.findById(req.params.id);
+      res.json(provider)
+  } catch (error) {
+      console.log(error);
   }
 })
 
