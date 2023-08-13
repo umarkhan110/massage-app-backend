@@ -12,10 +12,7 @@ const PORT = 5000;
 const cors = require('cors');
 
 mongoose
-  .connect('mongodb+srv://massage:massage@massageapp.peirmuq.mongodb.net/?retryWrites=true&w=majority', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect('mongodb://massage:massage@ac-rrnp3to-shard-00-00.peirmuq.mongodb.net:27017,ac-rrnp3to-shard-00-01.peirmuq.mongodb.net:27017,ac-rrnp3to-shard-00-02.peirmuq.mongodb.net:27017/?ssl=true&replicaSet=atlas-689ccw-shard-0&authSource=admin&retryWrites=true&w=majority')
   .then(() => {
     console.log('Database is connected');
   })
@@ -33,9 +30,14 @@ app.use('/uploads', express.static('uploads'));
 app.use('/admin', require('./routes/admin.js'));
 app.use('/provider', require('./routes/provider.js'));
 
-app.use('/user', require('./routes/dashboard.js'));
-app.use('/expense', require('./routes/expenses.js'));
+app.use('/client', require('./routes/user.js'));
+app.use('/booking', require('./routes/booking.js'));
 
 app.listen(PORT, () => {
   console.log('Server is listening on port ' + PORT);
 });
+
+// 'mongodb+srv://massage:massage@massageapp.peirmuq.mongodb.net/?retryWrites=true&w=majority', {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//   }

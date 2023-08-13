@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs")
 const booking = new mongoose.Schema({
+    userId:{
+        type:String,
+        required:true
+    },
     service_type:{
         type:String,
         required:true
@@ -30,26 +34,26 @@ const booking = new mongoose.Schema({
         type:String,
         required:true
     },
-    hotel :{
-        type:Boolean,
-        required:true
-    },
-    massage_table :{
-        type:String,
-        required:true
-    },
-    stairs:{
-        type:String,
-        required:true
-    },
+    // hotel :{
+    //     type:Boolean,
+    //     required:true
+        // },
+        // massage_table :{
+    //     type:String,
+    //     required:true
+    // },
+    // stairs:{
+    //     type:String,
+    //     required:true
+    // },
     date :{
         type:String,
         required:true
     },
-    time  :{
-        type:String,
-        required:true
-    },
+    // time  :{
+    //     type:String,
+    //     required:true
+    // },
     status :{
         type:String,
         required:true

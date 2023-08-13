@@ -54,6 +54,10 @@ const provider = new mongoose.Schema({
     ],
     status:{
         type:String,
+    },
+    role:{
+        type:String,
+        required:true
     }, 
     password: {
         type:String,

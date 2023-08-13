@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router();
 const Providers = require('../model/Provider');
 const Orders = require('../model/Booking');
+const bcrypt = require("bcryptjs");
 const path = require('path');
 const multer = require('multer');
 
@@ -19,10 +20,11 @@ const upload = multer({ storage: storage });
 // Create New Provider
 router.post('/apply_provider', upload.single("image"), async (req, res) => {
     const status = "Pending"
+    const role = "Provider"
         const { fullname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password  } = req.body;
         const image = (req.file) ? req.file.filename : null;
         try {
-        const provider = new Providers({ fullname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password, status, image });
+        const provider = new Providers({ fullname, email, phone, gender, nearest, certified, expertise, liability, highest_level_of_training, years_of_experience, password, status, image, role });
         const saveProvider = await provider.save();
         //res.json(saveblog)
         return res.status(200).json({ message: "Provider Saved" });

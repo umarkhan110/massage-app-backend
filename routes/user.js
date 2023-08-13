@@ -6,7 +6,7 @@ const bcrypt = require("bcryptjs");
 const dotenv = require('dotenv');
 const path = require('path');
 const multer = require('multer');
-
+const stripe = require("stripe")(process.env.STRIPE_KEY)
 // const storage = multer.diskStorage({
 //   destination: (req, file, cb) => {
 //       cb(null, './uploads')
@@ -19,17 +19,16 @@ const multer = require('multer');
 // const upload = multer({ storage: storage });
 
 router.post("/signup",  async (req, res) => {
-  const { fname, lname, email, phone, gender, age, password } = req.body;
+  const { name, email, phone, password } = req.body;
 //   const image = (req.file) ? req.file.filename : null;
   try {
+    const role = "Client"
     const userExist = await Users.findOne({ email: email });
     if (userExist) {
       return res.status(422).send({ message: "Email is already exist." });
     } 
-    // else if (password !== cpassword) {
-    //   return res.status(422).send({ message: "Password is not matched." });}
     else {
-      const user = new Users({ fname, lname, email, phone, gender, age, password });
+      const user = new Users({ name, email, phone, password, role });
       await user.save();
       return res.status(200).json({ message: "User Created Successfully" });
     }
@@ -46,16 +45,8 @@ router.post('/signin', async (req, res) => {
           return res.status(400).json({ error: "plz fill the filled" })
       }
       const emailExist = await Users.findOne({ email: email });
-      // console.log(emailExist)
       if (emailExist) {
           const passMatch = await bcrypt.compare(password, emailExist.password);
-          // token = await emailExist.generateAuthToken();
-         // console.log(token)
-          //  res.status(200).json();
-          // res.cookie("jwtoken", token, {
-          //            expires: new Date(Date.now() + 9000000),
-          //          httpOnly: true,
-          //         });
           if (!passMatch) {
               res.status(400).json({ error: "Password is not correct" })
           }else {
@@ -72,7 +63,7 @@ router.post('/signin', async (req, res) => {
 
 router.put('/updateuser/:id', async (req, res) => {
   try {
-    const { fname, lname, email, phone, gender, age, password } = req.body;
+    const { name, email, password } = req.body;
     let image = req.body.image; // Default to the existing image
 
     // Check if a new image is uploaded
@@ -102,6 +93,25 @@ router.put('/updateuser/:id', async (req, res) => {
   } catch (error) {
     console.log(error);
   }
+});
+
+
+
+router.post("/payment", async (req, res) => {
+  stripe.charges.create(
+    {
+      source: req.body.tokenId,
+      amount: req.body.amount,
+      currency:"usd",
+    },
+    (stripeErr, stripeRes) =>{
+      if(stripeErr){
+        res.status(500).json(stripeErr)
+      }else{
+        res.status(200).json(stripeRes)
+      }
+    }
+  )
 });
 
 module.exports = router;

@@ -4,12 +4,13 @@ const Booking = require('../model/Booking');
 
 // Create Booking
 router.post('/booking', async (req, res) => {
-        const { service_type, people, therapist_gender, duration, who_is_this_massage_for, treatment, address, hotel, massage_table, stairs, date, time  } = req.body;
+        const { userId, service_type, people, therapist_gender, duration, who_is_this_massage_for, treatment, address, hotel, massage_table, stairs, date, time  } = req.body;
     try {
-        const booking = new Booking({ service_type, people, therapist_gender, duration, who_is_this_massage_for, treatment, address, hotel, massage_table, stairs, date, time });
+        const status = "Pending"
+        const booking = new Booking({ userId, service_type, people, therapist_gender, duration, who_is_this_massage_for, treatment, address, hotel, massage_table, stairs, date, time, status });
         const save_booking = await booking.save();
         //res.json(saveblog)
-        return res.status(200).json({ message: "booking Saved" });
+        return res.status(200).json({ message: "Your Order is Submitted" });
     } catch (error) {
         console.log(error);
     }
@@ -18,7 +19,7 @@ router.post('/booking', async (req, res) => {
 // Get Booking
 router.get('/showBooking/:id', async (req, res) => {
     try {
-        const booking = await Booking.find({id:req.params.id});
+        const booking = await Booking.find({userId:req.params.id});
         res.json(booking)
     } catch (error) {
         console.log(error);

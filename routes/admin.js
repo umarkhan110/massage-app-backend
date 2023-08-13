@@ -8,6 +8,7 @@ const path = require('path');
 const multer = require('multer');
 const Providers = require('../model/Provider');
 const authenticate = require('../middleware/admin');
+const Bookings = require("../model/Booking");
 
 router.post("/signup",  async (req, res) => {
   const { email, password } = req.body;
@@ -110,5 +111,15 @@ router.put('/updateProviderPassword/:id', authenticate, async (req, res) => {
     console.log(error);
   }
 });
+
+// Get All Booking
+router.get('/showBooking', authenticate, async (req, res) => {
+  try {
+      const booking = await Bookings.find();
+      res.json(booking)
+  } catch (error) {
+      console.log(error);
+  }
+})
 
 module.exports = router;
